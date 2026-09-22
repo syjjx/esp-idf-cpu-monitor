@@ -1,0 +1,48 @@
+menu "CPU Monitor"
+
+config CPU_MONITOR_ENABLE
+    bool "Enable CPU load monitor"
+    default y
+    help
+        Register lightweight FreeRTOS idle hooks and create the sampling task.
+        Disable this option to keep the public API available without creating
+        any hooks or tasks.
+
+config CPU_MONITOR_SAMPLE_INTERVAL_MS
+    int "Sampling interval (ms)"
+    depends on CPU_MONITOR_ENABLE
+    range 250 5000
+    default 1000
+
+config CPU_MONITOR_WARMUP_SAMPLES
+    int "Warmup samples"
+    depends on CPU_MONITOR_ENABLE
+    range 1 60
+    default 5
+
+config CPU_MONITOR_EMA_PERCENT
+    int "EMA smoothing (%)"
+    depends on CPU_MONITOR_ENABLE
+    range 1 100
+    default 30
+
+config CPU_MONITOR_TASK_STACK_SIZE
+    int "Monitor task stack size (bytes)"
+    depends on CPU_MONITOR_ENABLE
+    range 1024 8192
+    default 2048
+
+config CPU_MONITOR_TASK_PRIORITY
+    int "Monitor task priority"
+    depends on CPU_MONITOR_ENABLE
+    range 1 24
+    default 2
+
+config CPU_MONITOR_DEBUG
+    bool "Log sampled CPU load"
+    depends on CPU_MONITOR_ENABLE
+    default n
+    help
+        Emit one diagnostic line per sample. Keep disabled in normal firmware.
+
+endmenu
